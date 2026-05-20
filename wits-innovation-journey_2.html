@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wits Researcher Innovation Journey</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --blue-900: #0a1628;
+    --blue-800: #0f2547;
+    --blue-700: #1a3a6e;
+    --gold:     #c9922a;
+    --gold-lt:  #e8b84b;
+    --teal:     #1a7f74;
+    --teal-lt:  #2aa89a;
+    --coral:    #c0392b;
+    --coral-lt: #e05140;
+    --amber:    #b7600f;
+    --amber-lt: #d4802a;
+    --green:    #1e6f45;
+    --green-lt: #2a9460;
+    --grey:     #4a5568;
+    --grey-lt:  #718096;
+    --surface:  #f7f4ef;
+    --card-bg:  #ffffff;
+    --border:   #e2ddd5;
+    --text:     #1a1a2e;
+    --text-sm:  #4a4a6a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--surface);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .header {
+    background: var(--blue-900);
+    padding: 32px 48px 28px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    border-bottom: 3px solid var(--gold);
+  }
+  .header-logo {
+    width: 56px; height: 56px;
+    background: var(--gold);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px; color: var(--blue-900); font-weight: bold;
+    flex-shrink: 0;
+  }
+  .header-text h1 { font-family: 'DM Serif Display', serif; font-size: 26px; color: #fff; letter-spacing: -0.3px; line-height: 1.2; }
+  .header-text p  { font-size: 13px; color: #a0aec0; margin-top: 4px; font-weight: 300; }
+
+  .main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .phase {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+    background: var(--card-bg);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+  .phase-header {
+    padding: 14px 22px;
+    display: flex; align-items: center; gap: 14px;
+    cursor: pointer; user-select: none;
+    transition: filter 0.15s;
+  }
+  .phase-header:hover { filter: brightness(0.96); }
+  .phase-num {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif; font-size: 16px; color: #fff; flex-shrink: 0;
+  }
+  .phase-title { flex: 1; font-size: 15px; font-weight: 600; color: #fff; }
+  .phase-trl   { font-size: 11px; color: rgba(255,255,255,0.72); font-weight: 300; margin-left: auto; white-space: nowrap; }
+  .phase-chevron { font-size: 12px; color: rgba(255,255,255,0.7); transition: transform 0.25s; flex-shrink: 0; }
+  .phase.open .phase-chevron { transform: rotate(180deg); }
+  .phase-body { display: none; padding: 20px 22px 22px; border-top: 1px solid var(--border); }
+  .phase.open .phase-body { display: block; }
+
+  .p1 .phase-header { background: var(--blue-700); }
+  .p1 .phase-num    { background: var(--gold); color: var(--blue-900); }
+  .p2 .phase-header { background: var(--teal); }
+  .p2 .phase-num    { background: var(--teal-lt); }
+  .p3 .phase-header { background: var(--coral); }
+  .p3 .phase-num    { background: var(--coral-lt); }
+  .p4 .phase-header { background: var(--amber); }
+  .p4 .phase-num    { background: var(--amber-lt); }
+  .p5 .phase-header { background: var(--green); }
+  .p5 .phase-num    { background: var(--green-lt); }
+
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin-top: 14px; }
+  .card {
+    border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 16px;
+    background: var(--surface); cursor: pointer;
+    transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
+  }
+  .card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.10); transform: translateY(-2px); }
+  .card h4 { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .card p  { font-size: 12px; color: var(--text-sm); line-height: 1.5; }
+
+  .p1 .card { border-top: 3px solid var(--blue-700); } .p1 .card h4 { color: var(--blue-700); }
+  .p2 .card { border-top: 3px solid var(--teal);     } .p2 .card h4 { color: var(--teal);     }
+  .p3 .card { border-top: 3px solid var(--coral);    } .p3 .card h4 { color: var(--coral);    }
+  .p4 .card { border-top: 3px solid var(--amber);    } .p4 .card h4 { color: var(--amber);    }
+  .p5 .card { border-top: 3px solid var(--green);    } .p5 .card h4 { color: var(--green);    }
+
+  .alert { border-radius: 8px; padding: 12px 16px; font-size: 13px; line-height: 1.6; margin-top: 14px; }
+  .alert-amber { background: #fff8ee; border: 1.5px solid #e8b84b; color: #7a4a00; }
+  .alert-blue  { background: #eef3fb; border: 1.5px solid #93b4e8; color: #1a3a6e; }
+  .alert strong { font-weight: 600; }
+
+  .eq-table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13px; }
+  .eq-table th { background: var(--blue-800); color: #fff; padding: 9px 12px; text-align: left; font-weight: 500; }
+  .eq-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+  .eq-table tr:last-child td { background: #fff8ee; font-weight: 600; }
+  .eq-table td:last-child { text-align: right; font-weight: 600; color: var(--amber); }
+
+  .trl-bar { display: flex; gap: 4px; margin-top: 14px; flex-wrap: wrap; }
+  .trl-cell { flex: 1; min-width: 52px; border-radius: 6px; padding: 8px 4px; text-align: center; font-size: 11px; font-weight: 500; color: #fff; }
+  .trl-grey  { background: var(--grey); }
+  .trl-teal  { background: var(--teal); }
+  .trl-amber { background: var(--amber); }
+  .trl-coral { background: var(--coral); }
+  .trl-legend { display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap; font-size: 12px; color: var(--text-sm); }
+  .trl-legend span { display: flex; align-items: center; gap: 5px; }
+  .trl-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  .connector { display: flex; align-items: center; gap: 10px; padding: 0 10px; font-size: 12px; color: var(--text-sm); }
+  .connector-line { flex: 1; height: 1px; background: var(--border); }
+  .connector-arrow { font-size: 18px; color: var(--gold); }
+
+  .ecosystem { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 12px; margin-top: 14px; align-items: start; }
+  .eco-col { display: flex; flex-direction: column; gap: 10px; }
+  .eco-center { border: 2px solid var(--coral); border-radius: 12px; padding: 16px; background: #fff5f5; text-align: center; cursor: pointer; }
+  .eco-center h4 { font-size: 14px; font-weight: 700; color: var(--coral); }
+  .eco-center p  { font-size: 12px; color: var(--text-sm); margin-top: 4px; line-height: 1.5; }
+
+  .chat-toggle {
+    position: fixed; bottom: 28px; right: 28px;
+    width: 58px; height: 58px; border-radius: 50%;
+    background: var(--blue-800); border: 2.5px solid var(--gold);
+    color: #fff; font-size: 24px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25); z-index: 1000;
+    transition: transform 0.15s;
+  }
+  .chat-toggle:hover { transform: scale(1.08); }
+
+  .chat-panel {
+    position: fixed; bottom: 100px; right: 28px;
+    width: 370px; max-height: 520px;
+    background: #fff; border-radius: 16px;
+    border: 1.5px solid var(--border);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.16);
+    display: flex; flex-direction: column;
+    z-index: 999; overflow: hidden;
+    transform: scale(0.9) translateY(20px); opacity: 0; pointer-events: none;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .chat-panel.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+
+  .chat-header { background: var(--blue-900); padding: 14px 18px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .chat-header h3 { font-size: 14px; color: #fff; font-weight: 600; flex: 1; }
+  .chat-close { color: #a0aec0; font-size: 18px; cursor: pointer; background: none; border: none; line-height: 1; }
+
+  .chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; font-size: 13px; }
+  .msg { border-radius: 10px; padding: 10px 13px; max-width: 90%; line-height: 1.55; }
+  .msg-user { background: var(--blue-800); color: #fff; align-self: flex-end; }
+  .msg-ai   { background: var(--surface); color: var(--text); align-self: flex-start; border: 1px solid var(--border); }
+  .msg-loading { color: var(--grey-lt); font-style: italic; }
+
+  .chat-input-row { padding: 12px; border-top: 1px solid var(--border); display: flex; gap: 8px; flex-shrink: 0; }
+  .chat-input {
+    flex: 1; border: 1.5px solid var(--border); border-radius: 8px;
+    padding: 9px 13px; font-size: 13px; font-family: 'DM Sans', sans-serif;
+    outline: none; resize: none; transition: border-color 0.15s;
+  }
+  .chat-input:focus { border-color: var(--blue-700); }
+  .chat-send {
+    background: var(--blue-800); border: none; border-radius: 8px;
+    color: #fff; padding: 9px 14px; font-size: 14px; cursor: pointer;
+    transition: background 0.15s; flex-shrink: 0;
+  }
+  .chat-send:hover { background: var(--blue-700); }
+  .chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 12px; }
+  .chip {
+    font-size: 11px; padding: 5px 10px; border-radius: 20px;
+    border: 1px solid var(--border); background: var(--surface);
+    cursor: pointer; transition: background 0.15s, border-color 0.15s;
+    color: var(--text-sm); font-family: 'DM Sans', sans-serif;
+  }
+  .chip:hover { background: #e8e4dd; border-color: var(--gold); color: var(--text); }
+
+  .footer { background: var(--blue-900); text-align: center; padding: 18px; font-size: 12px; color: #a0aec0; }
+
+  @media (max-width: 600px) {
+    .header { padding: 20px; }
+    .main { padding: 20px 14px 80px; }
+    .ecosystem { grid-template-columns: 1fr; }
+    .chat-panel { width: calc(100vw - 32px); right: 16px; }
+    .chat-toggle { right: 16px; bottom: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">W</div>
+  <div class="header-text">
+    <h1>Wits Researcher Innovation Journey</h1>
+    <p>From idea to spinout · Wits Commercialisation Guidelines V1.10 · TIA Readiness Levels · IPR Act 2008</p>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- PHASE 1 -->
+  <div class="phase p1 open">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-num">1</div>
+      <div class="phase-title">Identify your IP</div>
+      <div class="phase-trl">TRL 1–2 · Basic research → concept formulation</div>
+      <div class="phase-chevron">▼</div>
+    </div>
+    <div class="phase-body">
+      <div class="alert alert-amber">
+        <strong>⚠ Protect before you publish.</strong> Consult WIC before thesis submissions, conference presentations or any publications. A provisional patent or embargo must be in place first — once published, novelty is lost.
+      </div>
+      <div class="card-grid">
+        <div class="card" onclick="ask('What types of patents can a Wits researcher file, and how does WIC help with the process?')">
+          <h4>Patents</h4>
+          <p>Protect inventions. File a local provisional patent first, then pursue international registration. Wits (via WIC) covers filing costs.</p>
+        </div>
+        <div class="card" onclick="ask('How does copyright work at Wits for software and written works?')">
+          <h4>Copyright</h4>
+          <p>Covers software, creative and written works. Arises automatically on creation — register with WIC to formalise ownership.</p>
+        </div>
+        <div class="card" onclick="ask('When would I register a trade mark through Wits, and who manages it?')">
+          <h4>Trade marks</h4>
+          <p>Protect brand name, product name or logo. Register via WIC before any public disclosure or go-to-market activity.</p>
+        </div>
+        <div class="card" onclick="ask('What is know-how IP at Wits and when can it be ceded to a spinout?')">
+          <h4>Know-how</h4>
+          <p>Unpatentable methods, algorithms, software processes. IP may be ceded or licensed to your spinout by agreement with WIC.</p>
+        </div>
+      </div>
+      <div class="alert alert-blue">
+        <strong>Who owns the IP?</strong> By default, Wits owns IP created by staff and students using institutional resources. The IPR Act (2008) requires all publicly-funded IP to be disclosed to the institution. Wits may license or cede IP to a spinout, or license it on arm's-length terms to a third party.
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow">↓</div>
+    <span>Register your idea with WIC — this can happen at any stage</span>
+    <div class="connector-arrow">↓</div>
+    <div class="connector-line"></div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase p2">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-num">2</div>
+      <div class="phase-title">Stress-test your idea</div>
+      <div class="phase-trl">TRL 3–5 · Proof of concept → lab validation</div>
+      <div class="phase-chevron">▼</div>
+    </div>
+    <div class="phase-body">
+      <p style="font-size:13px;color:var(--text-sm)">WIC assesses five readiness dimensions before recommending next steps:</p>
+      <div class="card-grid">
+        <div class="card" onclick="ask('What does TRL mean and how does TIA use it to assess technology readiness?')">
+          <h4>Technology Readiness</h4>
+          <p>TRL 1–9 scale (TIA). Basic research → system proven in operational environment. TIA funding accessible from TRL 3 upward.</p>
+        </div>
+        <div class="card" onclick="ask('What is market readiness and how does WIC assess whether there is a market for my research?')">
+          <h4>Market Readiness</h4>
+          <p>MRL 1–9. Is there a validated gap? Have you spoken to potential customers or end-users?</p>
+        </div>
+        <div class="card" onclick="ask('What is manufacturing readiness and why does it matter for a Wits spinout?')">
+          <h4>Manufacturing Readiness</h4>
+          <p>Can your solution be produced at viable scale and cost? Lab proof ≠ manufacturable product.</p>
+        </div>
+        <div class="card" onclick="ask('What is investment readiness and what does WIC look for in a business model canvas?')">
+          <h4>Investment Readiness</h4>
+          <p>Business model canvas + market validation required before approaching any funders or investors.</p>
+        </div>
+        <div class="card" onclick="ask('What does IP readiness mean, and what protection needs to be in place before I disclose my idea publicly?')">
+          <h4>IP Readiness</h4>
+          <p>Protection must be in place before any public disclosure, investor pitch or commercial conversation.</p>
+        </div>
+      </div>
+      <p style="font-size:12px;font-weight:600;color:var(--text-sm);margin-top:18px;margin-bottom:6px">TIA Technology Readiness Levels — where does your research sit?</p>
+      <div class="trl-bar">
+        <div class="trl-cell trl-grey">TRL 1<br><span style="font-weight:300;font-size:10px">Basic sci.</span></div>
+        <div class="trl-cell trl-grey">TRL 2<br><span style="font-weight:300;font-size:10px">Concept</span></div>
+        <div class="trl-cell trl-teal">TRL 3<br><span style="font-weight:300;font-size:10px">PoC</span></div>
+        <div class="trl-cell trl-teal">TRL 4<br><span style="font-weight:300;font-size:10px">Lab valid.</span></div>
+        <div class="trl-cell trl-teal">TRL 5<br><span style="font-weight:300;font-size:10px">Relevant env.</span></div>
+        <div class="trl-cell trl-teal">TRL 6<br><span style="font-weight:300;font-size:10px">Prototype</span></div>
+        <div class="trl-cell trl-amber">TRL 7<br><span style="font-weight:300;font-size:10px">Pre-comm.</span></div>
+        <div class="trl-cell trl-amber">TRL 8<br><span style="font-weight:300;font-size:10px">Complete</span></div>
+        <div class="trl-cell trl-coral">TRL 9<br><span style="font-weight:300;font-size:10px">Commercial</span></div>
+      </div>
+      <div class="trl-legend">
+        <span><div class="trl-dot" style="background:var(--grey)"></div>Pre-WIC</span>
+        <span><div class="trl-dot" style="background:var(--teal)"></div>WIC-eligible (TIA funding accessible)</span>
+        <span><div class="trl-dot" style="background:var(--amber)"></div>Pre-commercial</span>
+        <span><div class="trl-dot" style="background:var(--coral)"></div>Commercial deployment</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow">↓</div>
+    <span>Ad-Hoc Innovation Committee approves idea to proceed</span>
+    <div class="connector-arrow">↓</div>
+    <div class="connector-line"></div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase p3">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-num">3</div>
+      <div class="phase-title">Who to engage and how</div>
+      <div class="phase-trl">TRL 5–8 · Prototype → pre-commercial</div>
+      <div class="phase-chevron">▼</div>
+    </div>
+    <div class="phase-body">
+      <div class="ecosystem">
+        <div class="eco-col">
+          <div class="card p3" onclick="ask('What is the role of Wits Commercial Enterprise (WCE) in supporting a spinout?')">
+            <h4>WCE</h4>
+            <p>Wits Commercial Enterprise — back-office support, governance and legal structuring for spinouts.</p>
+          </div>
+          <div class="card p3" onclick="ask('How does Wits Health Consortium support health-sector spinouts?')">
+            <h4>WHC</h4>
+            <p>Wits Health Consortium — specialist support for health-sector and clinical research spinouts.</p>
+          </div>
+          <div class="card p3" onclick="ask('What funding sources are available to Wits spinouts through WIC — TIA, UTF, WIF?')">
+            <h4>Funding Partners</h4>
+            <p>Wits Innovation Fund (WIF) · TIA · UTF · Industry partners — all via WIC introduction.</p>
+          </div>
+        </div>
+        <div class="eco-center" onclick="ask('What does the Wits Innovation Centre do and how do I contact them?')">
+          <div style="font-size:28px;margin-bottom:8px">🏛</div>
+          <h4>Wits Innovation Centre (WIC)</h4>
+          <p style="margin-top:8px">Your first point of contact. Idea registration, IP strategy, readiness assessment, funder introductions and spinout structuring.</p>
+          <p style="margin-top:10px;font-size:11px;color:var(--coral);font-weight:600">wits.ac.za/innovation</p>
+        </div>
+        <div class="eco-col">
+          <div class="card p3" onclick="ask('What is the Ad-Hoc Innovation Committee at Wits and what decisions does it make?')">
+            <h4>Ad-Hoc Innovation Committee</h4>
+            <p>DVC Research, Legal Counsel, CFO. Approves all spinout deals, equity terms and licensing agreements.</p>
+          </div>
+          <div class="card p3" onclick="ask('What is Tshimologong and what does it offer a Wits researcher starting a spinout?')">
+            <h4>Tshimologong</h4>
+            <p>Wits-owned digital innovation precinct in Braamfontein. Coworking, MakerSpace, IBM Research Lab. ~10% equity or fee.</p>
+          </div>
+          <div class="card p3" onclick="ask('What is the Wits Crucible Centre for Entrepreneurship and how does it differ from Tshimologong?')">
+            <h4>Wits Crucible</h4>
+            <p>Wits Business School Centre for Entrepreneurship (est. 2024). ECDP training → incubation → acceleration. 47 Main St, Joburg CBD.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow">↓</div>
+    <span>Business model canvas + market validation submitted to WIC</span>
+    <div class="connector-arrow">↓</div>
+    <div class="connector-line"></div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase p4">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-num">4</div>
+      <div class="phase-title">Form your spinout</div>
+      <div class="phase-trl">TRL 7–8 · Investment-ready · BRL 6–8</div>
+      <div class="phase-chevron">▼</div>
+    </div>
+    <div class="phase-body">
+      <div class="card-grid" style="grid-template-columns: repeat(3,1fr)">
+        <div class="card" onclick="ask('How do I register an idea at the Wits Innovation Centre and when should I do it?')">
+          <h4>1. Register idea</h4>
+          <p>Via WIC at any stage of your research journey. Early registration protects you and triggers WIC support.</p>
+        </div>
+        <div class="card" onclick="ask('What IP protection strategy does WIC put in place before a spinout is formed?')">
+          <h4>2. IP strategy</h4>
+          <p>WIC files provisional patent or other protection. No investor conversations before this step.</p>
+        </div>
+        <div class="card" onclick="ask('What are the standard equity terms Wits takes in a spinout and can they be negotiated?')">
+          <h4>3. Agree equity terms</h4>
+          <p>Standard Terms document available. Wits minimum share is 9%, maximum 24%, based on cumulative contributions.</p>
+        </div>
+      </div>
+      <p style="font-size:12px;font-weight:600;color:var(--text-sm);margin-top:18px;margin-bottom:8px">Wits equity contributions — Table 1, Commercialisation Guidelines V1.10</p>
+      <table class="eq-table">
+        <tr><th>Wits contribution</th><th style="text-align:right">Cumulative equity</th></tr>
+        <tr><td>Local IP registered or planned (provisional patent)</td><td>+ 2.5%</td></tr>
+        <tr><td>International IP registered or planned</td><td>+ 5.0%</td></tr>
+        <tr><td>Wits staff / postgraduate / undergraduate involvement in R&amp;D</td><td>+ 7.5%</td></tr>
+        <tr><td>Wits resources used (labs, computing, indirect funding)</td><td>+ 5.0%</td></tr>
+        <tr><td>Pre-seed funding ≥ R100 000 (not via WIF)</td><td>+ 2.5%</td></tr>
+        <tr><td><strong>Minimum Wits founding share</strong></td><td>9% min · 24% max</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow">↓</div>
+    <span>Ad-Hoc Innovation Committee approves spinout formation</span>
+    <div class="connector-arrow">↓</div>
+    <div class="connector-line"></div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="phase p5">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-num">5</div>
+      <div class="phase-title">Grow your venture</div>
+      <div class="phase-trl">TRL 8–9 · Full commercial deployment · BRL 7–9</div>
+      <div class="phase-chevron">▼</div>
+    </div>
+    <div class="phase-body">
+      <div class="card-grid">
+        <div class="card" onclick="ask('What does Tshimologong offer a Wits spinout in incubation — space, support and equity?')">
+          <h4>Incubate at Tshimologong</h4>
+          <p>Coworking, MakerSpace, IBM Research Lab, mentorship, digital skills programmes. Equity or fee arrangement (~10%).</p>
+        </div>
+        <div class="card" onclick="ask('What is the Wits Crucible ECDP programme and how does it lead to incubation?')">
+          <h4>Accelerate via Wits Crucible</h4>
+          <p>ECDP → formal incubation pathway → acceleration for top performers. 47 Main St, Joburg CBD. 250-entrepreneur cohort planned for 2026.</p>
+        </div>
+        <div class="card" onclick="ask('How does the Wits Innovation Fund work and what does it invest in?')">
+          <h4>Wits Innovation Fund (WIF)</h4>
+          <p>Investment vehicle for Wits spinouts. Subject to WIF committee approval. Separate from WIC pre-seed support.</p>
+        </div>
+      </div>
+      <div class="alert alert-amber">
+        <strong>⚠ Ongoing governance obligations.</strong> Disclose all directorships annually and within 30 days of any change. Declare and recuse from conflicts of interest. Comply with Wits IP Policy at all times. Academic inventors should sit on the board — not in the C-Suite. Use of the Wits brand requires prior written approval.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Wits Commercialisation Guidelines V1.10 · TIA Technology Readiness Levels · IPR Act No. 51 of 2008 · Contact WIC: wits.ac.za/innovation
+</div>
+
+<button class="chat-toggle" onclick="toggleChat()" title="Ask a question">💬</button>
+
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <h3>Ask about the innovation journey</h3>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg msg-ai">Hi! I can answer questions about the Wits innovation process — IP, spinouts, equity, WIC, TRL levels, Tshimologong, the Wits Crucible, and more. What would you like to know?</div>
+  </div>
+  <div class="chip-row">
+    <div class="chip" onclick="ask('How do I register my idea with WIC?')">Register an idea</div>
+    <div class="chip" onclick="ask('What equity does Wits take in a spinout?')">Equity terms</div>
+    <div class="chip" onclick="ask('What is the difference between Tshimologong and the Wits Crucible?')">Tshimologong vs Crucible</div>
+    <div class="chip" onclick="ask('What funding is available for Wits spinouts?')">Funding options</div>
+  </div>
+  <div class="chat-input-row">
+    <textarea class="chat-input" id="chatInput" rows="1" placeholder="Ask a question…" onkeydown="handleKey(event)"></textarea>
+    <button class="chat-send" id="sendBtn" onclick="sendMessage()">➤</button>
+  </div>
+</div>
+
+<script>
+function togglePhase(header) {
+  header.closest('.phase').classList.toggle('open');
+}
+
+let chatOpen = false;
+function toggleChat() {
+  chatOpen = !chatOpen;
+  document.getElementById('chatPanel').classList.toggle('open', chatOpen);
+  if (chatOpen) document.getElementById('chatInput').focus();
+}
+
+function ask(question) {
+  if (!chatOpen) { chatOpen = true; document.getElementById('chatPanel').classList.add('open'); }
+  sendMessage(question);
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+const SYSTEM = `You are an expert guide on the Wits University (University of the Witwatersrand) innovation and commercialisation process. Answer questions based strictly on the following source materials: Wits Commercialisation Guidelines V1.10, TIA Technology Readiness Levels, IPR Act No. 51 of 2008, and information about Tshimologong and the Wits Crucible.
+
+Key facts:
+- Wits owns IP created by staff and students using institutional resources. The IPR Act (2008) requires publicly-funded IP to be disclosed to the institution.
+- IP types: Patents (local provisional first then international), Copyright (software/written works), Trade marks, Know-how.
+- CRITICAL: Consult WIC before any publication, thesis submission or conference presentation. Provisional patent must be in place first.
+- WIC = Wits Innovation Centre — first point of contact for all innovation at Wits.
+- Equity table (Table 1, Commercialisation Guidelines): Local IP +2.5%, International IP +5.0%, Staff/student R&D +7.5%, Wits resources +5.0%, Pre-seed ≥R100k (not WIF) +2.5%. Min Wits share: 9%. Max: 24%.
+- Ad-Hoc Innovation Committee: DVC Research, Legal Counsel, CFO. Approves all spinout deals.
+- TRL 1-2 = basic science (pre-WIC); TRL 3-6 = WIC-eligible, TIA funding accessible; TRL 7-8 = pre-commercial; TRL 9 = commercial.
+- Tshimologong: wholly Wits-owned, Level 1 B-BBEE, digital innovation precinct in Braamfontein. MakerSpace, IBM Research Lab. 105+ startups incubated. ~10% equity or fee.
+- Wits Crucible: est. 2024 at Wits Business School. ECDP → incubation → acceleration. 47 Main St Joburg CBD (Anglo American building). R84m Services SETA seed grant. 250-entrepreneur cohort in 2026.
+- WCE = Wits Commercial Enterprise (governance/back-office). WHC = Wits Health Consortium (health spinouts).
+- Funding: WIF, TIA, UTF, industry — all via WIC.
+- Governance: annual directorship disclosure, 30-day change disclosure, declare conflicts, IP Policy compliance, academic inventors on board not C-Suite, Wits brand use requires approval.
+
+Be concise and practical. Do not invent specific contact details or figures not listed above.`;
+
+const history = [];
+
+async function sendMessage(override) {
+  const input = document.getElementById('chatInput');
+  const text = override || input.value.trim();
+  if (!text) return;
+  addMsg(text, 'user');
+  if (!override) input.value = '';
+  history.push({ role: 'user', content: text });
+  document.getElementById('sendBtn').disabled = true;
+  const loading = addMsg('Thinking…', 'ai loading');
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM,
+        messages: history
+      })
+    });
+    const data = await res.json();
+    const reply = data?.content?.[0]?.text || 'Sorry, no response received. Please try again.';
+    loading.remove();
+    addMsg(reply, 'ai');
+    history.push({ role: 'assistant', content: reply });
+  } catch(e) {
+    loading.remove();
+    addMsg('Network error — please check your connection and try again.', 'ai');
+  }
+  document.getElementById('sendBtn').disabled = false;
+  document.getElementById('chatInput').focus();
+}
+
+function addMsg(text, type) {
+  const c = document.getElementById('chatMessages');
+  const el = document.createElement('div');
+  el.className = 'msg msg-' + (type.startsWith('ai') ? 'ai' : 'user');
+  if (type.includes('loading')) el.classList.add('msg-loading');
+  el.textContent = text;
+  c.appendChild(el);
+  c.scrollTop = c.scrollHeight;
+  return el;
+}
+</script>
+</body>
+</html>
